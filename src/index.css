@@ -1,0 +1,28 @@
+@import 'tailwindcss';
+
+:root {
+  --color-bg: #000000;
+  --color-primary: #00FFFF;
+  --color-secondary: #FF00AA;
+  --color-accent: #FFFF00;
+  --color-stress: #FF0000;
+  --color-calm: #00FF88;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Orbitron', 'Rajdhani', sans-serif;
+  background: var(--color-bg);
+  color: var(--color-primary);
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+#root {
+  min-height: 100vh;
+}
