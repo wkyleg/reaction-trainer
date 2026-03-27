@@ -47,6 +47,29 @@ const INITIAL_NEURO_STATE: NeuroState = {
   alphaBumpState: null,
 };
 
+function neuroStateChanged(prev: NeuroStoreState, next: NeuroState): boolean {
+  return (
+    prev.source !== next.source ||
+    prev.eegConnected !== next.eegConnected ||
+    prev.cameraActive !== next.cameraActive ||
+    prev.calm !== next.calm ||
+    prev.arousal !== next.arousal ||
+    prev.bpm !== next.bpm ||
+    prev.bpmQuality !== next.bpmQuality ||
+    prev.signalQuality !== next.signalQuality ||
+    prev.alphaPower !== next.alphaPower ||
+    prev.betaPower !== next.betaPower ||
+    prev.thetaPower !== next.thetaPower ||
+    prev.deltaPower !== next.deltaPower ||
+    prev.gammaPower !== next.gammaPower ||
+    prev.alphaBump !== next.alphaBump ||
+    prev.hrvRmssd !== next.hrvRmssd ||
+    prev.calmnessState !== next.calmnessState ||
+    prev.alphaPeakFreq !== next.alphaPeakFreq ||
+    prev.alphaBumpState !== next.alphaBumpState
+  );
+}
+
 export const useNeuroStore = create<NeuroStore>((set, get) => ({
   ...INITIAL_NEURO_STATE,
   manager: null,
@@ -112,7 +135,10 @@ export const useNeuroStore = create<NeuroStore>((set, get) => ({
     if (!manager) return;
     manager.update(dt);
     const state = manager.getState();
-    set({ ...state });
+    const current = get();
+    if (neuroStateChanged(current, state)) {
+      set({ ...state });
+    }
   },
 
   destroy: () => {

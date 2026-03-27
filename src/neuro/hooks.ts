@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
+import { useShallow } from 'zustand/shallow';
 import { useNeuroStore } from './store';
 
 export { useNeuroStore } from './store';
@@ -8,45 +9,51 @@ export function useNeuro() {
 }
 
 export function useNeuroSignals() {
-  return useNeuroStore((s) => ({
-    calm: s.calm,
-    arousal: s.arousal,
-    bpm: s.bpm,
-    hrvRmssd: s.hrvRmssd,
-    signalQuality: s.signalQuality,
-    source: s.source,
-  }));
+  return useNeuroStore(
+    useShallow((s) => ({
+      calm: s.calm,
+      arousal: s.arousal,
+      bpm: s.bpm,
+      hrvRmssd: s.hrvRmssd,
+      signalQuality: s.signalQuality,
+      source: s.source,
+    })),
+  );
 }
 
 export function useNeuroConnection() {
-  return useNeuroStore((s) => ({
-    eegConnected: s.eegConnected,
-    cameraActive: s.cameraActive,
-    mockEnabled: s.mockEnabled,
-    wasmReady: s.wasmReady,
-    source: s.source,
-    connecting: s.connecting,
-    error: s.error,
-    connectHeadband: s.connectHeadband,
-    enableCamera: s.enableCamera,
-    disableCamera: s.disableCamera,
-    enableMock: s.enableMock,
-    disableMock: s.disableMock,
-  }));
+  return useNeuroStore(
+    useShallow((s) => ({
+      eegConnected: s.eegConnected,
+      cameraActive: s.cameraActive,
+      mockEnabled: s.mockEnabled,
+      wasmReady: s.wasmReady,
+      source: s.source,
+      connecting: s.connecting,
+      error: s.error,
+      connectHeadband: s.connectHeadband,
+      enableCamera: s.enableCamera,
+      disableCamera: s.disableCamera,
+      enableMock: s.enableMock,
+      disableMock: s.disableMock,
+    })),
+  );
 }
 
 export function useNeuroEeg() {
-  return useNeuroStore((s) => ({
-    alphaPower: s.alphaPower,
-    betaPower: s.betaPower,
-    thetaPower: s.thetaPower,
-    deltaPower: s.deltaPower,
-    gammaPower: s.gammaPower,
-    alphaBump: s.alphaBump,
-    calmnessState: s.calmnessState,
-    alphaPeakFreq: s.alphaPeakFreq,
-    alphaBumpState: s.alphaBumpState,
-  }));
+  return useNeuroStore(
+    useShallow((s) => ({
+      alphaPower: s.alphaPower,
+      betaPower: s.betaPower,
+      thetaPower: s.thetaPower,
+      deltaPower: s.deltaPower,
+      gammaPower: s.gammaPower,
+      alphaBump: s.alphaBump,
+      calmnessState: s.calmnessState,
+      alphaPeakFreq: s.alphaPeakFreq,
+      alphaBumpState: s.alphaBumpState,
+    })),
+  );
 }
 
 /**
@@ -54,34 +61,32 @@ export function useNeuroEeg() {
  * Mount this once at the app root level.
  */
 export function useNeuroLoop() {
-  const tick = useNeuroStore((s) => s.tick);
-  const manager = useNeuroStore((s) => s.manager);
+  const tickRef = useRef(useNeuroStore.getState().tick);
+  const managerRef = useRef(useNeuroStore.getState().manager);
   const lastTimeRef = useRef<number>(0);
-
-  const loop = useCallback(
-    (time: number) => {
-      if (lastTimeRef.current > 0) {
-        const dt = Math.min((time - lastTimeRef.current) / 1000, 0.1);
-        tick(dt);
-      }
-      lastTimeRef.current = time;
-    },
-    [tick],
-  );
+  const rafIdRef = useRef<number>(0);
 
   useEffect(() => {
-    if (!manager) return;
+    return useNeuroStore.subscribe((state) => {
+      tickRef.current = state.tick;
+      managerRef.current = state.manager;
+    });
+  }, []);
 
-    let rafId: number;
+  useEffect(() => {
     const frame = (time: number) => {
-      loop(time);
-      rafId = requestAnimationFrame(frame);
+      if (managerRef.current && lastTimeRef.current > 0) {
+        const dt = Math.min((time - lastTimeRef.current) / 1000, 0.1);
+        tickRef.current(dt);
+      }
+      lastTimeRef.current = time;
+      rafIdRef.current = requestAnimationFrame(frame);
     };
-    rafId = requestAnimationFrame(frame);
+    rafIdRef.current = requestAnimationFrame(frame);
 
     return () => {
-      cancelAnimationFrame(rafId);
+      cancelAnimationFrame(rafIdRef.current);
       lastTimeRef.current = 0;
     };
-  }, [manager, loop]);
+  }, []);
 }

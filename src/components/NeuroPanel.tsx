@@ -52,18 +52,24 @@ export function NeuroPanel({ className = '', compact = false }: NeuroPanelProps)
 
       <div className="grid grid-cols-3 gap-4">
         <div>
-          <div className="text-xs" style={{ color: 'var(--color-muted)' }}>BPM</div>
+          <div className="text-xs" style={{ color: 'var(--color-muted)' }}>
+            BPM
+          </div>
           <div className="text-2xl font-semibold tabular-nums flex items-center gap-1">
             <span style={{ color: '#FF3B30', fontSize: 14 }}>♥</span>
             {displayBpm}
           </div>
         </div>
         <div>
-          <div className="text-xs" style={{ color: 'var(--color-muted)' }}>HRV</div>
+          <div className="text-xs" style={{ color: 'var(--color-muted)' }}>
+            HRV
+          </div>
           <div className="text-2xl font-semibold tabular-nums">{displayHrv}</div>
         </div>
         <div>
-          <div className="text-xs" style={{ color: 'var(--color-muted)' }}>Calm</div>
+          <div className="text-xs" style={{ color: 'var(--color-muted)' }}>
+            Calm
+          </div>
           <div className="text-2xl font-semibold tabular-nums" style={{ color: 'var(--color-calm)' }}>
             {displayCalm}%
           </div>

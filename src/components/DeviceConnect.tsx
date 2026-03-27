@@ -7,16 +7,8 @@ interface DeviceConnectProps {
 }
 
 export function DeviceConnect({ onReady, showSkip = true, onSkip }: DeviceConnectProps) {
-  const {
-    eegConnected,
-    cameraActive,
-    wasmReady,
-    connecting,
-    error,
-    connectHeadband,
-    enableCamera,
-    enableMock,
-  } = useNeuroConnection();
+  const { eegConnected, cameraActive, wasmReady, connecting, error, connectHeadband, enableCamera, enableMock } =
+    useNeuroConnection();
 
   const hasConnection = eegConnected || cameraActive;
 
@@ -62,8 +54,8 @@ export function DeviceConnect({ onReady, showSkip = true, onSkip }: DeviceConnec
               type="button"
               onClick={() => connectHeadband()}
               disabled={connecting.eeg}
-              className="px-5 py-2 rounded-lg text-white font-medium text-sm cursor-pointer disabled:opacity-50"
-              style={{ background: 'var(--color-accent, #000080)' }}
+              className="px-5 py-2 rounded-lg font-medium text-sm cursor-pointer disabled:opacity-50"
+              style={{ background: 'var(--color-accent, #000080)', color: '#111' }}
             >
               {connecting.eeg ? 'Scanning...' : 'Connect Headband'}
             </button>

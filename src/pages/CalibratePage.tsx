@@ -1,9 +1,9 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { DeviceConnect } from '../components/DeviceConnect';
-import { useNeuroConnection } from '../neuro/hooks';
-import { useGameStore } from '../lib/gameStore';
 import type { Difficulty } from '../lib/gameStore';
+import { useGameStore } from '../lib/gameStore';
+import { useNeuroConnection } from '../neuro/hooks';
 
 type Phase = 'connect' | 'difficulty' | 'countdown';
 
@@ -88,11 +88,13 @@ export function CalibratePage() {
           </p>
 
           <div className="flex flex-col gap-4 w-72">
-            {([
-              { key: 'normal', label: 'NORMAL', desc: 'Relaxed pace, generous timing', color: 'var(--color-calm)' },
-              { key: 'hard', label: 'HARD', desc: 'Faster spawns, tighter windows', color: 'var(--color-accent)' },
-              { key: 'extreme', label: 'EXTREME', desc: 'Relentless. Good luck.', color: 'var(--color-stress)' },
-            ] as const).map(({ key, label, desc, color }) => (
+            {(
+              [
+                { key: 'normal', label: 'NORMAL', desc: 'Relaxed pace, generous timing', color: 'var(--color-calm)' },
+                { key: 'hard', label: 'HARD', desc: 'Faster spawns, tighter windows', color: 'var(--color-accent)' },
+                { key: 'extreme', label: 'EXTREME', desc: 'Relentless. Good luck.', color: 'var(--color-stress)' },
+              ] as const
+            ).map(({ key, label, desc, color }) => (
               <button
                 key={key}
                 type="button"

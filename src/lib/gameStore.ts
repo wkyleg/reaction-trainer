@@ -17,7 +17,27 @@ export interface StressSnapshot {
   time: number;
   stress: number;
   calm: number;
+  arousal: number;
+  bpm: number | null;
+  hrv: number | null;
   flowActive: boolean;
+  alphaPower: number | null;
+  betaPower: number | null;
+  thetaPower: number | null;
+  deltaPower: number | null;
+  gammaPower: number | null;
+  alphaPeakFreq: number | null;
+  alphaBumpState: string | null;
+  respirationRate: number | null;
+}
+
+export interface HitEvent {
+  time: number;
+  reactionTime: number;
+  calm: number;
+  stress: number;
+  arousal: number;
+  bpm: number | null;
 }
 
 interface GameState {
@@ -28,6 +48,7 @@ interface GameState {
   reactionTimes: number[];
   stressLevel: number;
   stressTimeline: StressSnapshot[];
+  hitEvents: HitEvent[];
   flowActive: boolean;
   flowStreak: number;
   isPlaying: boolean;
@@ -39,15 +60,47 @@ interface GameState {
   roundDuration: number;
 }
 
+interface NeuroContext {
+  calm: number;
+  arousal: number;
+  bpm: number | null;
+  hrv: number | null;
+  stress: number;
+  alphaPower?: number | null;
+  betaPower?: number | null;
+  thetaPower?: number | null;
+  deltaPower?: number | null;
+  gammaPower?: number | null;
+  alphaPeakFreq?: number | null;
+  alphaBumpState?: string | null;
+  respirationRate?: number | null;
+}
+
 interface GameActions {
   setDifficulty: (d: Difficulty) => void;
   startGame: () => void;
   endGame: () => void;
   spawnTarget: () => void;
-  hitTarget: (id: string) => void;
+  hitTarget: (id: string, neuro?: NeuroContext) => void;
   missTarget: (id: string) => void;
   tickTimer: (dt: number) => void;
-  updateStress: (stress: number, calm: number) => void;
+  updateStress: (
+    stress: number,
+    calm: number,
+    extra?: {
+      arousal: number;
+      bpm: number | null;
+      hrv: number | null;
+      alphaPower?: number | null;
+      betaPower?: number | null;
+      thetaPower?: number | null;
+      deltaPower?: number | null;
+      gammaPower?: number | null;
+      alphaPeakFreq?: number | null;
+      alphaBumpState?: string | null;
+      respirationRate?: number | null;
+    },
+  ) => void;
   setFlowActive: (active: boolean) => void;
   removeExpiredTargets: () => void;
   reset: () => void;
@@ -75,6 +128,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   reactionTimes: [],
   stressLevel: 0,
   stressTimeline: [],
+  hitEvents: [],
   flowActive: false,
   flowStreak: 0,
   isPlaying: false,
@@ -97,6 +151,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       reactionTimes: [],
       stressLevel: 0,
       stressTimeline: [],
+      hitEvents: [],
       flowActive: false,
       flowStreak: 0,
       isPlaying: true,
@@ -114,6 +169,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       maxCombo: state.maxCombo,
       reactionTimes: state.reactionTimes,
       stressTimeline: state.stressTimeline,
+      hitEvents: state.hitEvents,
       totalHits: state.totalHits,
       totalMisses: state.totalMisses,
       totalSpawned: state.totalSpawned,
@@ -149,24 +205,34 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }));
   },
 
-  hitTarget: (id) => {
-    const { targets, flowActive } = get();
+  hitTarget: (id, neuro) => {
+    const { targets, flowActive, roundDuration, timeRemaining } = get();
     const target = targets.find((t) => t.id === id);
     if (!target) return;
 
     const reactionTime = (performance.now() - target.spawnedAt) / 1000;
     const baseScore = Math.max(10, Math.round(100 * (1 - reactionTime / target.lifetime)));
     const multiplier = flowActive ? 2 : 1;
+    const elapsed = roundDuration - timeRemaining;
 
     set((s) => {
       const newCombo = s.combo + 1;
       const comboBonus = Math.floor(newCombo / 5) * 10;
+      const hitEvent: HitEvent = {
+        time: elapsed,
+        reactionTime,
+        calm: neuro?.calm ?? 0,
+        stress: neuro?.stress ?? s.stressLevel,
+        arousal: neuro?.arousal ?? 0,
+        bpm: neuro?.bpm ?? null,
+      };
       return {
         targets: s.targets.filter((t) => t.id !== id),
         score: s.score + (baseScore + comboBonus) * multiplier,
         combo: newCombo,
         maxCombo: Math.max(s.maxCombo, newCombo),
         reactionTimes: [...s.reactionTimes, reactionTime],
+        hitEvents: [...s.hitEvents, hitEvent],
         totalHits: s.totalHits + 1,
       };
     });
@@ -186,13 +252,29 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }));
   },
 
-  updateStress: (stress, calm) => {
+  updateStress: (stress, calm, extra) => {
     const elapsed = get().roundDuration - get().timeRemaining;
     set((s) => ({
       stressLevel: stress,
       stressTimeline: [
         ...s.stressTimeline,
-        { time: elapsed, stress, calm, flowActive: s.flowActive },
+        {
+          time: elapsed,
+          stress,
+          calm,
+          arousal: extra?.arousal ?? stress,
+          bpm: extra?.bpm ?? null,
+          hrv: extra?.hrv ?? null,
+          flowActive: s.flowActive,
+          alphaPower: extra?.alphaPower ?? null,
+          betaPower: extra?.betaPower ?? null,
+          thetaPower: extra?.thetaPower ?? null,
+          deltaPower: extra?.deltaPower ?? null,
+          gammaPower: extra?.gammaPower ?? null,
+          alphaPeakFreq: extra?.alphaPeakFreq ?? null,
+          alphaBumpState: extra?.alphaBumpState ?? null,
+          respirationRate: extra?.respirationRate ?? null,
+        },
       ],
     }));
   },
@@ -226,6 +308,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       reactionTimes: [],
       stressLevel: 0,
       stressTimeline: [],
+      hitEvents: [],
       flowActive: false,
       flowStreak: 0,
       isPlaying: false,

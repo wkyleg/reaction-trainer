@@ -368,10 +368,7 @@ export class ElataRppgProvider {
     }
   }
 
-  private detectAndCorrectHarmonic(
-    rawBpm: number,
-    metrics: Metrics,
-  ): { correctedBpm: number; wasHarmonic: boolean } {
+  private detectAndCorrectHarmonic(rawBpm: number, metrics: Metrics): { correctedBpm: number; wasHarmonic: boolean } {
     const spectral = metrics.spectral_bpm ?? null;
     const acf = metrics.acf_bpm ?? null;
     const peaks = metrics.peaks_bpm ?? null;

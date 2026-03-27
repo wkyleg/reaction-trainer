@@ -20,16 +20,19 @@ export class SimulatedEegSource {
   start(onFrame: (frame: SimulatedEegFrame) => void) {
     logger.info('SimulatedEegSource', 'start');
     this.stop();
-    this.timer = setInterval(() => {
-      const data = this.generateSampleMajorChunk(this.chunkSamples);
-      onFrame({
-        type: 'eeg',
-        fs: this.sampleRate,
-        channels: DEFAULT_CHANNELS,
-        data,
-        timestamp: Date.now(),
-      });
-    }, Math.round((this.chunkSamples / this.sampleRate) * 1000));
+    this.timer = setInterval(
+      () => {
+        const data = this.generateSampleMajorChunk(this.chunkSamples);
+        onFrame({
+          type: 'eeg',
+          fs: this.sampleRate,
+          channels: DEFAULT_CHANNELS,
+          data,
+          timestamp: Date.now(),
+        });
+      },
+      Math.round((this.chunkSamples / this.sampleRate) * 1000),
+    );
   }
 
   stop() {

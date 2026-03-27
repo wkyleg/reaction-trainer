@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { DeviceConnect } from '../components/DeviceConnect';
-import { useNeuroConnection } from '../neuro/hooks';
-import { useGameStore } from '../lib/gameStore';
 import type { Difficulty } from '../lib/gameStore';
+import { useGameStore } from '../lib/gameStore';
+import { useNeuroConnection } from '../neuro/hooks';
 
 function Slider({
   label,
@@ -29,10 +29,7 @@ function Slider({
         >
           {label}
         </span>
-        <span
-          className="text-sm font-bold tabular-nums"
-          style={{ fontFamily: "'Orbitron', sans-serif", color }}
-        >
+        <span className="text-sm font-bold tabular-nums" style={{ fontFamily: "'Orbitron', sans-serif", color }}>
           {value}%
         </span>
       </div>
@@ -104,16 +101,16 @@ export function SettingsPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center py-10 px-4 scanlines grid-bg overflow-y-auto">
+    <div className="min-h-screen flex flex-col items-center pt-16 pb-10 px-6 scanlines grid-bg overflow-y-auto">
       {/* Header */}
       <h1
-        className="text-3xl font-black tracking-[0.2em] neon-text mb-8"
+        className="text-3xl font-black tracking-[0.2em] neon-text mb-12"
         style={{ fontFamily: "'Orbitron', sans-serif", color: 'var(--color-primary)' }}
       >
         SETTINGS
       </h1>
 
-      <div className="w-full max-w-md flex flex-col gap-8">
+      <div className="w-full max-w-md flex flex-col gap-10">
         {/* Audio */}
         <section>
           <h3
@@ -126,12 +123,7 @@ export function SettingsPage() {
           >
             AUDIO
           </h3>
-          <Slider
-            label="Master Volume"
-            value={audioVolume}
-            onChange={setAudioVolume}
-            color="var(--color-secondary)"
-          />
+          <Slider label="Master Volume" value={audioVolume} onChange={setAudioVolume} color="var(--color-secondary)" />
         </section>
 
         {/* Visuals */}
@@ -153,11 +145,7 @@ export function SettingsPage() {
               onChange={setVisualIntensity}
               color="var(--color-accent)"
             />
-            <Toggle
-              label="Reduced Motion"
-              checked={reducedMotion}
-              onChange={setReducedMotion}
-            />
+            <Toggle label="Reduced Motion" checked={reducedMotion} onChange={setReducedMotion} />
           </div>
         </section>
 
@@ -185,8 +173,10 @@ export function SettingsPage() {
                   fontFamily: "'Orbitron', sans-serif",
                   color: diffColors[d],
                   border: `1px solid ${difficulty === d ? diffColors[d] : 'rgba(255,255,255,0.1)'}`,
-                  background: difficulty === d ? `color-mix(in srgb, ${diffColors[d]} 10%, transparent)` : 'transparent',
-                  boxShadow: difficulty === d ? `0 0 10px color-mix(in srgb, ${diffColors[d]} 30%, transparent)` : 'none',
+                  background:
+                    difficulty === d ? `color-mix(in srgb, ${diffColors[d]} 10%, transparent)` : 'transparent',
+                  boxShadow:
+                    difficulty === d ? `0 0 10px color-mix(in srgb, ${diffColors[d]} 30%, transparent)` : 'none',
                 }}
               >
                 {d}
