@@ -7,6 +7,8 @@
   --color-accent: #FFFF00;
   --color-stress: #FF0000;
   --color-calm: #00FF88;
+  --color-panel: rgba(0, 255, 255, 0.05);
+  --color-muted: rgba(0, 255, 255, 0.5);
 }
 
 * {
@@ -25,4 +27,178 @@ body {
 
 #root {
   min-height: 100vh;
+}
+
+/* Neon text glow */
+.neon-text {
+  text-shadow:
+    0 0 7px var(--color-primary),
+    0 0 10px var(--color-primary),
+    0 0 21px var(--color-primary),
+    0 0 42px var(--color-primary);
+}
+
+.neon-text-secondary {
+  text-shadow:
+    0 0 7px var(--color-secondary),
+    0 0 10px var(--color-secondary),
+    0 0 21px var(--color-secondary);
+}
+
+.neon-text-accent {
+  text-shadow:
+    0 0 7px var(--color-accent),
+    0 0 10px var(--color-accent),
+    0 0 21px var(--color-accent);
+}
+
+/* Neon box glow */
+.neon-border {
+  box-shadow:
+    0 0 5px var(--color-primary),
+    0 0 10px var(--color-primary),
+    inset 0 0 5px rgba(0, 255, 255, 0.1);
+  border: 1px solid var(--color-primary);
+}
+
+.neon-border-secondary {
+  box-shadow:
+    0 0 5px var(--color-secondary),
+    0 0 10px var(--color-secondary),
+    inset 0 0 5px rgba(255, 0, 170, 0.1);
+  border: 1px solid var(--color-secondary);
+}
+
+/* Pulsing start button */
+@keyframes pulse-neon {
+  0%, 100% {
+    box-shadow:
+      0 0 5px var(--color-primary),
+      0 0 10px var(--color-primary),
+      0 0 20px var(--color-primary);
+    text-shadow:
+      0 0 5px var(--color-primary),
+      0 0 10px var(--color-primary);
+  }
+  50% {
+    box-shadow:
+      0 0 10px var(--color-primary),
+      0 0 25px var(--color-primary),
+      0 0 50px var(--color-primary),
+      0 0 80px var(--color-primary);
+    text-shadow:
+      0 0 10px var(--color-primary),
+      0 0 20px var(--color-primary),
+      0 0 40px var(--color-primary);
+  }
+}
+
+.pulse-neon {
+  animation: pulse-neon 2s ease-in-out infinite;
+}
+
+/* Scanline overlay */
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+.scanlines::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 255, 255, 0.03) 2px,
+    rgba(0, 255, 255, 0.03) 4px
+  );
+  pointer-events: none;
+}
+
+/* Target pop-in */
+@keyframes target-spawn {
+  0% { transform: scale(0) rotate(0deg); opacity: 0; }
+  60% { transform: scale(1.2) rotate(180deg); opacity: 1; }
+  100% { transform: scale(1) rotate(360deg); opacity: 1; }
+}
+
+.target-spawn {
+  animation: target-spawn 0.3s ease-out forwards;
+}
+
+/* Target hit burst */
+@keyframes target-hit {
+  0% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(2.5); opacity: 0; }
+}
+
+.target-hit {
+  animation: target-hit 0.25s ease-out forwards;
+  pointer-events: none;
+}
+
+/* Countdown flash */
+@keyframes countdown-pulse {
+  0% { transform: scale(0.5); opacity: 0; }
+  50% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); opacity: 0.8; }
+}
+
+.countdown-pulse {
+  animation: countdown-pulse 0.8s ease-out;
+}
+
+/* Stress border glow */
+@keyframes stress-border {
+  0%, 100% { box-shadow: inset 0 0 30px rgba(255, 0, 0, 0.1); }
+  50% { box-shadow: inset 0 0 60px rgba(255, 0, 0, 0.3); }
+}
+
+/* Flow mode shimmer */
+@keyframes flow-shimmer {
+  0% { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+
+.flow-shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent 30%,
+    rgba(0, 255, 136, 0.08) 50%,
+    transparent 70%
+  );
+  background-size: 200% 100%;
+  animation: flow-shimmer 3s linear infinite;
+}
+
+/* Flicker for arcade text */
+@keyframes flicker {
+  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
+  20%, 24%, 55% { opacity: 0.4; }
+}
+
+.flicker {
+  animation: flicker 3s linear infinite;
+}
+
+/* Grid background */
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(0, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .pulse-neon,
+  .target-spawn,
+  .target-hit,
+  .countdown-pulse,
+  .flow-shimmer,
+  .flicker {
+    animation: none;
+  }
 }
