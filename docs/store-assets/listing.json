@@ -1,0 +1,16 @@
+{
+  "name": "Reaction Trainer",
+  "symbol": "REACT",
+  "category": "GAMES",
+  "tags": ["reaction", "arcade", "stress", "neurotech", "EEG"],
+  "description": "Test your reaction speed while biometrics warp the difficulty. Hit targets fast, stay calm under pressure, and watch how stress changes the game. Your heart rate and brain waves decide whether you're in flow state or fighting against yourself.",
+  "longDescription": "Reaction Trainer is a neural arcade that measures how well you perform under pressure, not just how fast your fingers move.\n\nThe core loop is simple: targets appear, you hit them as fast as you can. What makes it different is that your physiological state actively changes the challenge. Connect an EEG headband or webcam and the game reads your stress level, heart rate, and brain wave patterns in real time.\n\nWhen you're calm, the game enters flow state. Targets are clearer, timing windows are generous, and bonus multipliers kick in. When stress spikes, the game pushes back. Targets move unpredictably, timing windows shrink, and the visual field gets more chaotic. The game is literally easier when you can control your stress response.\n\nThis creates a training loop: you're not just practicing reaction speed, you're practicing composure. Over time, you learn to maintain calm under escalating pressure, and your scores reflect that.\n\nPost-session results break down your performance with charts showing reaction times, hit accuracy, stress curves, heart rate, and brain wave activity. You can see the exact moments where panic cost you points.\n\nThe interface is pure neon arcade. Black background, cyan and magenta accents, scanline effects, grid overlays. Everything glows.\n\nWorks without sensors for basic reaction testing. Add your webcam or EEG headband to unlock the full stress-reactive experience.",
+  "purchaseDescription": "Premium content and challenge modes:\n\n- Endurance Mode: Increasingly difficult sessions that test how long you can maintain composure as pressure builds\n- Precision Gauntlet: Smaller targets, tighter windows, with neural scoring that rewards calm accuracy over frantic speed\n- Dual Task Challenges: Reaction targets combined with memory, pattern recognition, or math problems\n- Training Programs: 30-day structured programs that progressively train stress resilience through gameplay\n- Competitive Leaderboards: Ranked matches where neural composure score is weighted alongside raw reaction time",
+  "tokenomicsDescription": "Token details and allocation specifics are being finalized. More information coming soon.",
+  "socialLinks": {
+    "twitter": "https://x.com/Elata_Bio",
+    "discord": "https://discord.gg/8UdPKztc6u",
+    "github": "https://github.com/Elata-Biosciences",
+    "website": "https://elata.bio"
+  }
+}
