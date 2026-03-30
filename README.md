@@ -8,6 +8,14 @@
 
 A neural arcade that tests reaction speed while your biometrics shape the difficulty. Hit targets fast, stay calm under pressure. EEG headbands and webcam heart rate tracking reveal how stress affects your performance in real time. When you're calm, the game rewards you. When stress spikes, the game fights back.
 
+## Gameplay preview
+
+| Desktop | Mobile |
+| --- | --- |
+| ![Reaction Trainer desktop gameplay](docs/store-assets/preview-desktop-01-1200w.webp) | ![Reaction Trainer mobile](docs/store-assets/preview-mobile-01-800w.webp) |
+
+More sizes and store metadata: [`docs/store-assets/`](docs/store-assets/).
+
 ## Features
 
 - **Stress-modulated difficulty** -- your heart rate and brain state actively change how the game plays (target behavior, timing windows, visual chaos)
